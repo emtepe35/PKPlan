@@ -1,6 +1,8 @@
 let list = window.frames["list"].document //pobranie frame, używany zamiast domyślnego Document
 let oddzialy = list.getElementById('oddzialy'); //list oddziałow
 
+var backup; //przechowuje tabele po załadowaniu w celu przywrócenia po zmianie kryteriów
+
 let bledneN = ["-(N)", "-N1", "-N2", "-N3", "-n1", "-n2", "-n3"]; //lista oznaczen w dniach nieparzystych
 let bledneP = ["-(P)", "-P1", "-P2", "-P3", "-p1", "-p2", "-p3"]; //lista oznaczen w dniach parzystych
 
@@ -19,6 +21,7 @@ function sleep(ms) { //funkcja pomocnicza, delay na załadowanie strony. Metoda 
 let wstawOpcje = async function () { //Rysuje navbar w headerze
     await sleep('50');
     plan = window.frames["plan"].document
+    backup = plan.getElementsByClassName('tabela')[0].innerHTML;
     titleBar = plan.getElementsByClassName('tytul')[0];
     titleBar.innerHTML += '<br>'
     titleBar.appendChild(stworzSelecty(plan));
@@ -64,6 +67,20 @@ let stworzSelecty = function (frame) { //generuje poziome menu selectów
     week.appendChild(parzysty);
     week.appendChild(nieparzysty);
 
+    //Plec 
+    let sex = document.createElement('select');
+    sex.name = 'sex'; sex.id = 'idSex'; sex.style.margin = '10px'
+
+    let man = document.createElement('option');
+    man.value = 'K'
+    man.innerHTML = 'Mężczyzna'
+    let woman = document.createElement('option');
+    woman.value = 'M'
+    woman.innerHTML = 'Kobieta'
+
+    sex.appendChild(man);
+    sex.appendChild(woman);
+
     //Przycisk zatwierdzający
     let button = document.createElement('button');
     button.innerText = 'Zmień'
@@ -73,11 +90,13 @@ let stworzSelecty = function (frame) { //generuje poziome menu selectów
     div.appendChild(gl);
     div.appendChild(gk);
     div.appendChild(week);
+    div.appendChild(sex);
     div.appendChild(button);
     return div;
 }
 
 let updatePlan = function (frame) { //wywołanie po kolei każdej funkcji usuwającej śmieci
+    plan.getElementsByClassName('tabela')[0].innerHTML = backup; //przywrócenie backupu
     let gl = frame.getElementById('idGL');
     let gk = frame.getElementById('idGK');
     let week = frame.getElementById('idWeek');
