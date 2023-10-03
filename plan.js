@@ -19,7 +19,7 @@ function sleep(ms) { //funkcja pomocnicza, delay na załadowanie strony. Metoda 
 }
 
 let wstawOpcje = async function () { //Rysuje navbar w headerze
-    await sleep('50');
+    await sleep('150');
     plan = window.frames["plan"].document
     backup = plan.getElementsByClassName('tabela')[0].innerHTML;
     titleBar = plan.getElementsByClassName('tytul')[0];
@@ -34,6 +34,7 @@ let stworzSelecty = function (frame) { //generuje poziome menu selectów
     //GL
     let gl = document.createElement('select');
     gl.name = 'selectGL'; gl.id = 'idGL'; gl.style.margin = '10px'
+    addSelectStyle(gl);
 
     for (let i = 1; i <= 7; i++) {
         let optGL = document.createElement('option');
@@ -45,6 +46,7 @@ let stworzSelecty = function (frame) { //generuje poziome menu selectów
     //GK
     let gk = document.createElement('select');
     gk.name = 'selectGK'; gk.id = 'idGK'; gk.style.margin = '10px'
+    addSelectStyle(gk);
 
     for (let i = 1; i <= 6; i++) {
         let optGK = document.createElement('option');
@@ -56,6 +58,7 @@ let stworzSelecty = function (frame) { //generuje poziome menu selectów
     //Tydzien 
     let week = document.createElement('select');
     week.name = 'week'; week.id = 'idWeek'; week.style.margin = '10px'
+    addSelectStyle(week);
 
     let parzysty = document.createElement('option');
     parzysty.value = 'n'
@@ -70,6 +73,7 @@ let stworzSelecty = function (frame) { //generuje poziome menu selectów
     //Plec 
     let sex = document.createElement('select');
     sex.name = 'sex'; sex.id = 'idSex'; sex.style.margin = '10px'
+    addSelectStyle(sex);
 
     let man = document.createElement('option');
     man.value = 'K'
@@ -85,6 +89,7 @@ let stworzSelecty = function (frame) { //generuje poziome menu selectów
     let button = document.createElement('button');
     button.innerText = 'Zmień'
     button.style.margin = '10px'
+    addSelectStyle(button);
     button.onclick = function () { updatePlan(frame) }; //zdarzenie onclick zatwierdzenia
 
     div.appendChild(gl);
@@ -99,11 +104,13 @@ let updatePlan = function (frame) { //wywołanie po kolei każdej funkcji usuwaj
     plan.getElementsByClassName('tabela')[0].innerHTML = backup; //przywrócenie backupu
     let gl = frame.getElementById('idGL');
     let gk = frame.getElementById('idGK');
+    let sex = frame.getElementById('idSex');
     let week = frame.getElementById('idWeek');
     //Przerzucam value z poszczególnych selectów do funkcji
     deleteByWeek(week.value);
     deleteByGL(gl.value);
     deleteByGK(gk.value);
+    deleteBySex(sex.value);
     clearMess(week.value);
 }
 
@@ -203,6 +210,36 @@ let deleteByGK = function (gk) {
         }
     })
 }
+let deleteBySex = function (sex) { //Usuwa wpisy na podstawie (M) lub (K). Szuka w pierwszym spanie
+    plan = window.frames["plan"].document
+    let lekcje = Array.from(plan.getElementsByClassName('l'));
+    lekcje.map((lekcja) => {
+        let spany = Array.from(lekcja.children)
+        for (let i = 0; i < spany.length; i++) {
+            if (spany[i].style.fontSize == '85%') { //Oddzielne szukanie dla mniejszych fontów, mają dodatkową warstwę spanów, nie mam pomysłu na lepsze
+                let spans = Array.from(spany[i].children)
+                for (let a = 0; a < spans.length; a++) {
+                    if (spans[a].className == 'p') {
+                        let str = spans[a].innerHTML;
+                        if (str.includes(`(${sex})`)) {
+                            spans[a].innerHTML = '';
+                            spans[a + 1].innerHTML = '';
+                            spans[a + 2].innerHTML = ''
+                        }
+                    }
+                }
+            }
+            if (spany[i].className == 'p') {
+                let str = spany[i].innerHTML;
+                if (str.includes(`(${sex})`)) {
+                    spany[i].innerHTML = '';
+                    spany[i + 1].innerHTML = '';
+                    spany[i + 2].innerHTML = ''
+                }
+            }
+        }
+    })
+}
 let clearMess = function (week) { //Czyści pozostałości po usuniętych wpisach. Niektóre wpisy mają oznaczenie N i P poza spanami, jako plaintext
     plan = window.frames["plan"].document
     let lekcje = Array.from(plan.getElementsByClassName('l'));
@@ -220,4 +257,10 @@ let clearMess = function (week) { //Czyści pozostałości po usuniętych wpisac
         }
         lekcja.innerHTML = edited;
     })
+}
+
+let addSelectStyle = function (el) {
+    el.style.borderRadius = '8px';
+    el.style.fontWeight = 'bold';
+    el.style.cursor = 'pointer';
 }

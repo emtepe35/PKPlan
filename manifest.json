@@ -1,6 +1,6 @@
 {
     "name": "Make PK Great Again",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "description": "Ta wtyczka ułatwia korzystanie z podziału zajęć Wydziału Mechanicznego PK",
     "manifest_version": 3,
     "author": "Mateusz Tupta",
