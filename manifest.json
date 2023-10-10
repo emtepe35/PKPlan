@@ -1,6 +1,6 @@
 {
     "name": "Make PK Great Again",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "description": "Ta wtyczka ułatwia korzystanie z podziału zajęć Wydziału Mechanicznego PK",
     "manifest_version": 3,
     "author": "Mateusz Tupta",
@@ -20,6 +20,14 @@
             ],
             "js": [
                 "plan.js"
+            ]
+        },
+        {
+            "matches": [
+                "http://podzial.mech.pk.edu.pl/stacjonarne/html/plany/*"
+            ],
+            "js": [
+                "planDirect.js"
             ]
         }
     ]

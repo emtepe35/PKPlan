@@ -1,20 +1,10 @@
-let list = window.frames["list"].document //pobranie frame, używany zamiast domyślnego Document
-let oddzialy = list.getElementById('oddzialy'); //list oddziałow
-
 var backup; //przechowuje tabele po załadowaniu w celu przywrócenia po zmianie kryteriów
 
 let bledneN = ["-(N)", "-N1", "-N2", "-N3", "-n1", "-n2", "-n3", "-(n", "-(n.", "."]; //lista oznaczen w dniach nieparzystych
 let bledneP = ["-(P)", "-P1", "-P2", "-P3", "-p1", "-p2", "-p3", "-(p", "-(p.", "."]; //lista oznaczen w dniach parzystych
 
-let plan = window.frames["plan"].document //frame z planem (niby div)
+let plan = document //frame z planem (niby div)
 let titleBar = plan.getElementsByClassName('tytul')[0]; //header gdzie wstawiam swój navbar
-
-
-
-let listaOddzialow = Array.from(oddzialy.children); //tworzy array z HTMLCollection oddziałow
-listaOddzialow.map((el) => {
-    el.onclick = function () { wstawOpcje() }; //ustawia onclick na każdy oddział
-})
 
 function sleep(ms) { //funkcja pomocnicza, delay na załadowanie strony. Metoda starożytna 
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -22,7 +12,6 @@ function sleep(ms) { //funkcja pomocnicza, delay na załadowanie strony. Metoda 
 
 let wstawOpcje = async function () { //Rysuje navbar w headerze
     await sleep('150');
-    plan = window.frames["plan"].document
     backup = plan.getElementsByClassName('tabela')[0].innerHTML;
     titleBar = plan.getElementsByClassName('tytul')[0];
     titleBar.innerHTML += '<br>'
@@ -117,7 +106,6 @@ let updatePlan = function (frame) { //wywołanie po kolei każdej funkcji usuwaj
 }
 
 let deleteByWeek = function (week) { //Usuwa wpisy na podstawie (N) lub (P). Szuka w ostatniej literze sali
-    plan = window.frames["plan"].document
     let lekcje = Array.from(plan.getElementsByClassName('l'));
     lekcje.map((lekcja) => {
         let spany = Array.from(lekcja.children)
@@ -149,7 +137,6 @@ let deleteByWeek = function (week) { //Usuwa wpisy na podstawie (N) lub (P). Szu
     })
 }
 let deleteByGL = function (gl) {
-    plan = window.frames["plan"].document
     let lekcje = Array.from(plan.getElementsByClassName('l'));
     lekcje.map((lekcja) => {
         let spany = Array.from(lekcja.children);
@@ -181,7 +168,6 @@ let deleteByGL = function (gl) {
     })
 }
 let deleteByGK = function (gk) {
-    plan = window.frames["plan"].document
     let lekcje = Array.from(plan.getElementsByClassName('l'));
     lekcje.map((lekcja) => {
         let spany = Array.from(lekcja.children);
@@ -213,7 +199,6 @@ let deleteByGK = function (gk) {
     })
 }
 let deleteBySex = function (sex) { //Usuwa wpisy na podstawie (M) lub (K). Szuka w pierwszym spanie
-    plan = window.frames["plan"].document
     let lekcje = Array.from(plan.getElementsByClassName('l'));
     lekcje.map((lekcja) => {
         let spany = Array.from(lekcja.children)
@@ -243,7 +228,6 @@ let deleteBySex = function (sex) { //Usuwa wpisy na podstawie (M) lub (K). Szuka
     })
 }
 let clearMess = function (week) { //Czyści pozostałości po usuniętych wpisach. Niektóre wpisy mają oznaczenie N i P poza spanami, jako plaintext
-    plan = window.frames["plan"].document
     let lekcje = Array.from(plan.getElementsByClassName('l'));
     lekcje.map((lekcja) => {
         let currentText = lekcja.innerHTML;
@@ -269,8 +253,4 @@ let addSelectStyle = function (el) {
     el.style.borderRadius = '8px';
     el.style.fontWeight = 'bold';
     el.style.cursor = 'pointer';
-}
-
-function getCurrentURL() {
-    return window.location.href
 }
