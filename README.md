@@ -5,4 +5,4 @@ This extension adds select lists for user to choose correct Laboratory and Compu
 
 Visualization:
 ![Before](https://github.com/emtepe35/PKPlan/blob/main/po.png)
-![After](https://github.com/emtepe35/PKPlan/blob/main/po.png)
+![After](https://github.com/emtepe35/PKPlan/blob/main/po1.png)
