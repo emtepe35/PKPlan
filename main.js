@@ -1,18 +1,38 @@
-let bledneN = ["-(N)", "-N1", "-N2", "-N3", "-n1", "-n2", "-n3", "-(n", "-(n ", "-(n.", "."]; //lista oznaczen w dniach nieparzystych
-let bledneP = ["-(P)", "-P1", "-P2", "-P3", "-p1", "-p2", "-p3", "-(p", "-(p.", "."]; //lista oznaczen w dniach parzystych
+let bledneN = ["-(N)", "-(N", "-N1", "-N2", "-N3", "-n1", "-n2", "-n3", "-(n", "-(n ", "-(n.", "-(n. ", "."]; //lista oznaczen w dniach nieparzystych
+let bledneP = ["-(P)", "-(P", "-P1", "-P2", "-P3", "-p1", "-p2", "-p3", "-(p", "-(p ", "-(p.", "-(p. ", "."]; //lista oznaczen w dniach parzystych
 
 var backup; //przechowuje tabele po załadowaniu w celu przywrócenia po zmianie kryteriów
+
+var selectValues = {
+    gl: null,
+    gk: null,
+    week: null,
+    sex: null
+}
+
+var cookiesConfirmed = false;
 
 let engageScript = function (planFrame, direct, titleBar) {
     let plan = planFrame;
     let wstawOpcje = async function () { //Rysuje navbar w headerze
         await sleep('250');
+
         if (!direct) { plan = window.frames["plan"].document };
+        cookiesConfirmed = checkCookiesConfirmed();
+        if (!cookiesConfirmed) { askForCookies(plan) }
+
         backup = plan.getElementsByClassName('tabela')[0].innerHTML;
         titleBar = plan.getElementsByClassName('tytul')[0];
-        titleBar.innerHTML += '<br>';
-        titleBar.appendChild(stworzSelecty(plan));
-        titleBar.appendChild(weekParity());
+
+        selectValues = readCookies();
+
+        let titleChildren = Array.from(titleBar.children);
+        if (titleChildren.length < 5) { //tNaglowek nie zawiera jeszcze dodatków
+            titleBar.innerHTML += '<br>';
+            titleBar.appendChild(stworzSelecty(plan));
+            titleBar.appendChild(weekParity());
+        }
+
     }
     wstawOpcje(); //pierwsze wywołanie funkcji
 
@@ -73,6 +93,12 @@ let engageScript = function (planFrame, direct, titleBar) {
         sex.appendChild(man);
         sex.appendChild(woman);
 
+        //ustawienie wartości z cookie (jeśli pobrane)
+        if (selectValues.gl != null) { gl.value = selectValues.gl };
+        if (selectValues.gk != null) { gk.value = selectValues.gk };
+        if (selectValues.week != null) { week.value = selectValues.week };
+        if (selectValues.sex != null) { sex.value = selectValues.sex };
+
         //Przycisk zatwierdzający
         let button = document.createElement('button');
         button.innerText = 'Zmień'
@@ -94,6 +120,9 @@ let engageScript = function (planFrame, direct, titleBar) {
         let gk = frame.getElementById('idGK');
         let sex = frame.getElementById('idSex');
         let week = frame.getElementById('idWeek');
+        //wrzucam value selectów do cookies
+        if (cookiesConfirmed) { createCookies(gl.value, gk.value, week.value, sex.value) };
+
         //Przerzucam value z poszczególnych selectów do funkcji
         deleteByWeek(week.value);
         deleteByGL(gl.value);
@@ -244,10 +273,10 @@ let engageScript = function (planFrame, direct, titleBar) {
                 });
             }
             lekcja.innerHTML = edited;
-            if (lekcja.innerText.length < 7) {
+
+            if (lekcja.innerText.length <= 7) {
                 lekcja.innerText = '';
             }
-
         })
     }
 
