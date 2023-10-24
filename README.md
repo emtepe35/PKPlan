@@ -6,6 +6,8 @@ This extension adds select lists for user to choose correct Laboratory and Compu
 Visualization:
 
 Before:
-![Before](https://github.com/emtepe35/PKPlan/blob/main/po.png)
+![Before](https://github.com/emtepe35/PKPlan/blob/main/screenshots/po.png)
 After:
-![After](https://github.com/emtepe35/PKPlan/blob/main/po1.png)
+![After](https://github.com/emtepe35/PKPlan/blob/main/screenshots/po1.png)
+Cookies permission:
+![After](https://github.com/emtepe35/PKPlan/blob/main/screenshots/po2.png)
