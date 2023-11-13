@@ -1,6 +1,6 @@
 {
     "name": "PKPlan Wydzial Mechaniczny",
-    "version": "1.3.1",
+    "version": "1.4.1",
     "description": "Ta wtyczka ułatwia korzystanie z podziału zajęć Wydziału Mechanicznego PK",
     "manifest_version": 3,
     "author": "Mateusz Tupta",

@@ -57,17 +57,19 @@ function getCookie(cname) {
     return null;
 }
 
-let createCookies = (gl, gk, week, sex) => {
-    setCookie('gl', gl, 3);
-    setCookie('gk', gk, 3);
-    setCookie('week', week, 3);
-    setCookie('sex', sex, 3);
+let createCookies = (gl, gk, gp, week, sex) => {
+    setCookie('gl', gl, 180);
+    setCookie('gk', gk, 180);
+    setCookie('gp', gp, 180);
+    setCookie('week', week, 180);
+    setCookie('sex', sex, 180);
 }
 
 let readCookies = () => {
     return {
         gl: getCookie('gl'),
         gk: getCookie('gk'),
+        gp: getCookie('gp'),
         week: getCookie('week'),
         sex: getCookie('sex')
     }

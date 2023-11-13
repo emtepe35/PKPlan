@@ -10,6 +10,12 @@ var selectValues = {
     sex: null
 }
 
+var groupCount = {
+    gl: 8,
+    gk: 6,
+    gp: 8
+}
+
 var cookiesConfirmed = false;
 
 let engageScript = function (planFrame, direct, titleBar) {
@@ -44,7 +50,7 @@ let engageScript = function (planFrame, direct, titleBar) {
         gl.name = 'selectGL'; gl.id = 'idGL'; gl.style.margin = '10px'
         addSelectStyle(gl);
 
-        for (let i = 1; i <= 7; i++) {
+        for (let i = 1; i <= groupCount.gl; i++) {
             let optGL = document.createElement('option');
             optGL.value = 'L0' + String(i);
             optGL.innerHTML = 'GL0' + String(i);
@@ -56,11 +62,23 @@ let engageScript = function (planFrame, direct, titleBar) {
         gk.name = 'selectGK'; gk.id = 'idGK'; gk.style.margin = '10px'
         addSelectStyle(gk);
 
-        for (let i = 1; i <= 6; i++) {
+        for (let i = 1; i <= groupCount.gk; i++) {
             let optGK = document.createElement('option');
             optGK.value = 'K0' + String(i);
             optGK.innerHTML = 'GK0' + String(i);
             gk.appendChild(optGK);
+        }
+
+        //GP
+        let gp = document.createElement('select');
+        gp.name = 'selectGK'; gp.id = 'idGP'; gp.style.margin = '10px'
+        addSelectStyle(gp);
+
+        for (let i = 1; i <= groupCount.gp; i++) {
+            let optGP = document.createElement('option');
+            optGP.value = 'P0' + String(i);
+            optGP.innerHTML = 'GP0' + String(i);
+            gp.appendChild(optGP);
         }
 
         //Tydzien 
@@ -96,6 +114,7 @@ let engageScript = function (planFrame, direct, titleBar) {
         //ustawienie wartości z cookie (jeśli pobrane)
         if (selectValues.gl != null) { gl.value = selectValues.gl };
         if (selectValues.gk != null) { gk.value = selectValues.gk };
+        if (selectValues.gp != null) { gp.value = selectValues.gp };
         if (selectValues.week != null) { week.value = selectValues.week };
         if (selectValues.sex != null) { sex.value = selectValues.sex };
 
@@ -108,6 +127,7 @@ let engageScript = function (planFrame, direct, titleBar) {
 
         div.appendChild(gl);
         div.appendChild(gk);
+        div.appendChild(gp);
         div.appendChild(week);
         div.appendChild(sex);
         div.appendChild(button);
@@ -118,15 +138,17 @@ let engageScript = function (planFrame, direct, titleBar) {
         plan.getElementsByClassName('tabela')[0].innerHTML = backup; //przywrócenie backupu
         let gl = frame.getElementById('idGL');
         let gk = frame.getElementById('idGK');
+        let gp = frame.getElementById('idGP');
         let sex = frame.getElementById('idSex');
         let week = frame.getElementById('idWeek');
         //wrzucam value selectów do cookies
-        if (cookiesConfirmed) { createCookies(gl.value, gk.value, week.value, sex.value) };
+        if (cookiesConfirmed) { createCookies(gl.value, gk.value, gp.value, week.value, sex.value) };
 
         //Przerzucam value z poszczególnych selectów do funkcji
         deleteByWeek(week.value);
         deleteByGL(gl.value);
         deleteByGK(gk.value);
+        deleteByGP(gp.value);
         deleteBySex(sex.value);
         clearMess(week.value);
     }
@@ -217,6 +239,38 @@ let engageScript = function (planFrame, direct, titleBar) {
                     for (let a = 0; a < spany.length; a++) {
                         if (spany[a].className == 'p') {
                             if (spany[a].innerHTML.includes("K0") && !spany[a].innerHTML.includes(gk)) {
+                                spany[a].innerHTML = '';
+                                spany[a + 1].innerHTML = '';
+                                spany[a + 2].innerHTML = '';
+                            }
+                        }
+                    }
+                }
+            }
+        })
+    }
+    let deleteByGP = function (gp) {
+        if (!direct) { plan = window.frames["plan"].document };
+        let lekcje = Array.from(plan.getElementsByClassName('l'));
+        lekcje.map((lekcja) => {
+            let spany = Array.from(lekcja.children);
+            for (let i = 0; i < spany.length; i++) {
+                if (spany[i].style.fontSize == '85%') {
+                    let spans = Array.from(spany[i].children)
+                    for (let a = 0; a < spans.length; a++) {
+                        if (spans[a].className == 'p') {
+                            if (spans[a].innerHTML.includes("P0") && !spans[a].innerHTML.includes(gp)) {
+                                spans[a].innerHTML = '';
+                                spans[a + 1].innerHTML = '';
+                                spans[a + 2].innerHTML = '';
+                            }
+                        }
+                    }
+                }
+                if (spany[i].className == 'p') {
+                    for (let a = 0; a < spany.length; a++) {
+                        if (spany[a].className == 'p') {
+                            if (spany[a].innerHTML.includes("P0") && !spany[a].innerHTML.includes(gp)) {
                                 spany[a].innerHTML = '';
                                 spany[a + 1].innerHTML = '';
                                 spany[a + 2].innerHTML = '';
