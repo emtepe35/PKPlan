@@ -32,8 +32,13 @@ let engageScript = function (planFrame, direct, titleBar) {
 
         selectValues = readCookies();
 
+        //Ustawiam wstępnie parzystość na aktualną
+        if (checkParity()) { selectValues.week = 'n' }
+        else selectValues.week = 'p';
+
+
         let titleChildren = Array.from(titleBar.children);
-        if (titleChildren.length < 5) { //tNaglowek nie zawiera jeszcze dodatków
+        if (titleChildren.length < 5) { //Naglowek nie zawiera jeszcze dodatków
             titleBar.innerHTML += '<br>';
             titleBar.appendChild(stworzSelecty(plan));
             titleBar.appendChild(weekParity());
@@ -92,6 +97,8 @@ let engageScript = function (planFrame, direct, titleBar) {
         let nieparzysty = document.createElement('option');
         nieparzysty.value = 'p'
         nieparzysty.innerHTML = 'nieparzysty'
+
+
 
         week.appendChild(parzysty);
         week.appendChild(nieparzysty);
