@@ -24,7 +24,7 @@ let checkParity = () => {
     let parity = false;
     if (weekNumber % 2 == 0) { parity = true };
 
-    return !parity; //changed to ! in 2024
+    return parity;
 }
 
 let textStyle = (el) => {
